@@ -14,4 +14,6 @@ interface Repository {
 
     suspend fun toggleBeer(beerDomain: BeerDomain)
 
+     fun searchBeerQuery(query: String): Flow<Resource<List<BeerDomain>>>
+
 }

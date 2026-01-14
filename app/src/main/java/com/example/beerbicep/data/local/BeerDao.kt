@@ -24,4 +24,13 @@ interface BeerDao {
 
     @Query("SELECT * FROM beers WHERE id = :id")
      fun getBeerById(id: Int): Flow<BeerEntity?>
+
+     @Query(
+         """
+             SELECT * FROM beers 
+             WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%'
+             
+         """
+     )
+    suspend fun searchBeerQuery(query: String): List<BeerEntity>
 }

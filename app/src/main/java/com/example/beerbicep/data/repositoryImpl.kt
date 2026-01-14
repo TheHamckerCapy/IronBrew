@@ -44,6 +44,16 @@ class RepositoryImpl @Inject constructor(
             }
     }
 
+    override fun searchBeerQuery(query: String): Flow<Resource<List<BeerDomain>>> {
+        return flow {
+            emit(Resource.Loading(true))
+
+            emit(Resource.Success(
+                data = db.beerDao.searchBeerQuery(query).map { it.toBeerDomain() }
+            ))
+        }
+    }
+
     override fun getBeerById(id: Int): Flow<Resource<BeerDomain>> {
        return flow {
            Log.d(TAG, "getBeerById: Starting fetch for beer with id: $id")
