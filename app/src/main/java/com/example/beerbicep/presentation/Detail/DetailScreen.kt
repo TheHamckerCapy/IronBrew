@@ -24,6 +24,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalPizza
@@ -37,6 +39,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -58,11 +61,13 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.example.beerbicep.R
 import com.example.beerbicep.Resource
+import com.example.beerbicep.TtsController
 import com.example.beerbicep.domain.Amount
 import com.example.beerbicep.domain.BeerDomain
 import com.example.beerbicep.domain.Hop
 import com.example.beerbicep.domain.Ingredients
 import com.example.beerbicep.domain.Malt
+import com.example.beerbicep.rememberTextToSpeech
 import com.example.beerbicep.ui.theme.my_font_1
 
 @Composable
@@ -72,6 +77,12 @@ fun DetailScreen(
 ) {
 
     val state by viewModel.detailState.collectAsState()
+    val tts = rememberTextToSpeech()
+    DisposableEffect(Unit) {
+        onDispose {
+            tts.stop()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -109,7 +120,7 @@ fun DetailScreen(
                 if (beer != null) {
                     BeerDetailContent(
 
-
+                        tts=tts,
                         beer = beer,
                         onNavigateUp = {  },
                         onToggleFavorite = { viewModel.onEvent(DetailEvents.ToggleFav) }
@@ -122,6 +133,7 @@ fun DetailScreen(
 
 @Composable
 fun BeerDetailContent(
+    tts:TtsController,
     beer: BeerDomain,
     onNavigateUp: () -> Unit,
     onToggleFavorite: () -> Unit
@@ -240,7 +252,7 @@ fun BeerDetailContent(
                         contentDescription = beer.name,
                         modifier = Modifier
                             .fillMaxHeight(0.85f)
-                            .offset(y = 50.dp,x=20.dp)
+                            .offset(y = 50.dp, x = 20.dp)
                             .width(120.dp)
                             .height(140.dp),
                         contentScale = ContentScale.Fit,
@@ -257,25 +269,51 @@ fun BeerDetailContent(
                 .padding(horizontal = 24.dp)
         ) {
 
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
+                        tint = Color.LightGray,
+                        modifier = Modifier.size(30.dp)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = null,
-                    tint = Color.LightGray,
-                    modifier = Modifier.size(30.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Text(
-                    text = "About",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontFamily = my_font_1,
-                        fontWeight = FontWeight.Bold),
-                    color = Color.LightGray,
-                    fontSize = 30.sp
-                )
+                    Text(
+                        text = "About",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontFamily = my_font_1,
+                            fontWeight = FontWeight.Bold),
+                        color = Color.LightGray,
+                        fontSize = 30.sp
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        if (tts.isSpeaking){
+                            tts.stop()
+                        }else{
+                            tts.speak(beer.description)
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (tts.isSpeaking)
+                            Icons.Default.Stop
+                        else
+                            Icons.Default.VolumeUp,
+                        contentDescription = "Speak description",
+                        tint = if (tts.isSpeaking) Color.Red else Color.LightGray
+                    )
+                }
             }
+
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -491,6 +529,11 @@ fun BeerDetailContentNotFavoritePreview() {
     BeerDetailContent(
         beer = sampleBeer,
         onNavigateUp = {},
-        onToggleFavorite = {}
+        onToggleFavorite = {},
+        tts = TtsController(
+            speak = {},
+            stop = {},
+            isSpeaking = false
+        )
     )
 }
