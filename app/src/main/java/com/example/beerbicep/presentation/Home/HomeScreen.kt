@@ -112,6 +112,7 @@ fun HomeScreen(
             )
         }
     ) { paddingValues ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -129,24 +130,28 @@ fun HomeScreen(
                     }
                 )
             } else{
-                BeerListContent(
-                    beerPagingItems = beerPagingItems,
-                    onEvent = { event ->
-                        when (event) {
-                            is HomeEvents.OnBeerClick -> {
-                                onBeerClick(event.id)
-                            }
+                Column {
+                    BuildImageSlider()
+                    BeerListContent(
+                        beerPagingItems = beerPagingItems,
+                        onEvent = { event ->
+                            when (event) {
+                                is HomeEvents.OnBeerClick -> {
+                                    onBeerClick(event.id)
+                                }
 
-                            is HomeEvents.ToggleFav -> {
-                                viewModel.onEvent(event)
-                            }
+                                is HomeEvents.ToggleFav -> {
+                                    viewModel.onEvent(event)
+                                }
 
-                            HomeEvents.Refresh -> {
-                                beerPagingItems.refresh()
+                                HomeEvents.Refresh -> {
+                                    beerPagingItems.refresh()
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
+
             }
 
 

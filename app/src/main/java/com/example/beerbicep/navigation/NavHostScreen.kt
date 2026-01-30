@@ -47,9 +47,62 @@ fun NavScreen(
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
-    var bottomBarVisibility by remember { mutableStateOf(false) }
 
-    Scaffold {
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry.value?.destination?.route
+    val bottomBarVisibility = currentRoute!="detail/{beerId}"
+
+    val buttons = remember {
+        listOf(
+            ButtonData(
+                text = "Home",
+                icon = R.drawable.home_app
+            ),
+            ButtonData(
+                text = "Favs",
+                icon = R.drawable.bookmarks_24px
+            )
+        )
+    }
+
+
+    Scaffold (
+        bottomBar = {
+            if (bottomBarVisibility) {
+                // Determine selected index based on route
+                val selectedIndex = when (currentRoute) {
+                    "home" -> 0
+                    "favorites" -> 1
+                    else -> 0 // Default or handle appropriately
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                ) {
+                    AnimatedNavigationBar(
+                        buttons = buttons,
+                        barColor = Color.Black,
+                        circleColor = Color.Green, // The floating circle
+                        selectedColor = Color.Black, // Icon inside circle
+                        unselectedColor = Color.Gray, // Icons on bar
+                        selectedIndex = selectedIndex,
+                        onItemClick = { index ->
+                            val route = if (index == 0) "home" else "favorites"
+                            if (currentRoute != route) {
+                                navController.navigate(route) {
+                                    popUpTo("home") { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    ){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,7 +115,6 @@ fun NavScreen(
                 composable(
                     route = "home"
                 ) {
-                    bottomBarVisibility=true
                     HomeScreen(
                         onBeerClick = { beerId ->
                             navController.navigate("detail/$beerId")
@@ -76,7 +128,6 @@ fun NavScreen(
                     route = "detail/{beerId}",
                     arguments = listOf(navArgument("beerId") { type = NavType.IntType })
                 ) {
-                    bottomBarVisibility=false
                     DetailScreen(
 
                     )
@@ -84,7 +135,6 @@ fun NavScreen(
                 composable(
                     route = "favorites"
                 ) {
-                    bottomBarVisibility=true
                     FavScreen(
                         onBeerClick = { beerId ->
                             navController.navigate("detail/$beerId")
@@ -95,36 +145,22 @@ fun NavScreen(
                     )
                 }
             }
-            if (bottomBarVisibility) {
-                CustomNavigationBar(
-                    navController = navController,
-                    items = listOf(
-                        NavItem(
-                            route = "home",
-                            icon = R.drawable.home_app
-                        ),
-                        NavItem(
-                            route = "favorites",
-                            icon =R.drawable.bookmarks_24px
-                        )
-                    ),
-                    modifier = Modifier.align(Alignment.BottomCenter)
 
-                )
-            }
         }
 
     }
 }
 
+
+/*
 @Composable
 fun CustomNavigationBar(
     navController: NavController,
     items: List<NavItem>,
     modifier: Modifier = Modifier
 ) {
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry.value?.destination?.route
+
+
 
     Box(
         modifier = modifier
@@ -170,3 +206,5 @@ fun CustomNavigationBar(
     }
 
 }
+
+ */

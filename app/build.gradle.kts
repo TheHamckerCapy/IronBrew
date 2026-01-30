@@ -90,4 +90,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-paging:$room_version")
 
+    val latest_version ="0.34.0"
+    implementation("com.google.accompanist:accompanist-pager:$latest_version")
+
 }
