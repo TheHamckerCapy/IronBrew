@@ -45,13 +45,11 @@ fun BuildImageSlider(
     Column(modifier = modifier.fillMaxWidth()) {
         InfiniteHorizontalCarousel(
             items = imageUrls,
-            itemWidth = 350.dp,
             itemSpacing = 10.dp,
-            contentPadding = PaddingValues(horizontal = 2.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(vertical = 12.dp)
+                .padding(vertical = 8.dp)
         ) { imageUrl ->
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -71,7 +69,6 @@ fun BuildImageSlider(
 @Composable
 fun <T> InfiniteHorizontalCarousel(
     items: List<T>,
-    itemWidth: Dp,
     itemSpacing: Dp,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
@@ -94,8 +91,8 @@ fun <T> InfiniteHorizontalCarousel(
     Box(modifier = modifier) {
         HorizontalPager(
             state = state,
-            pageSize = PageSize.Fixed(itemWidth),
-            contentPadding = PaddingValues(horizontal = 32.dp),
+            pageSize = PageSize.Fill,
+            contentPadding = contentPadding,
             pageSpacing = itemSpacing,
             modifier = Modifier.fillMaxWidth()
         ) { index ->
@@ -104,7 +101,7 @@ fun <T> InfiniteHorizontalCarousel(
 
             Box(
                 modifier = Modifier
-                    .width(itemWidth)
+                    .fillMaxWidth()
                     .graphicsLayer {
                         val pageOffset =
                             ((state.currentPage - index) + state.currentPageOffsetFraction).absoluteValue

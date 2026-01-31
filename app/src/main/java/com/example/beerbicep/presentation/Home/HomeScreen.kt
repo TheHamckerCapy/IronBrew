@@ -130,8 +130,7 @@ fun HomeScreen(
                     }
                 )
             } else{
-                Column {
-                    BuildImageSlider()
+
                     BeerListContent(
                         beerPagingItems = beerPagingItems,
                         onEvent = { event ->
@@ -150,7 +149,7 @@ fun HomeScreen(
                             }
                         }
                     )
-                }
+
 
             }
 
@@ -214,6 +213,7 @@ fun BeerListContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // 1. The List of Beers
+        item { BuildImageSlider() }
         items(
             count = beerPagingItems.itemCount,
             key = beerPagingItems.itemKey { it.id }
