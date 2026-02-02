@@ -44,6 +44,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -87,7 +89,7 @@ fun HomeScreen(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResult by viewModel.searchResult.collectAsState()
     var isSearchMode by remember { mutableStateOf(false) }
-
+    val isRefreshing = beerPagingItems.loadState.refresh is LoadState.Loading
     // Handle Paging Error Toasts (Optional UX enhancement)
     LaunchedEffect(key1 = beerPagingItems.loadState) {
         if (beerPagingItems.loadState.refresh is LoadState.Error) {
@@ -130,25 +132,33 @@ fun HomeScreen(
                     }
                 )
             } else{
+                    PullToRefreshBox(
+                        isRefreshing = isRefreshing,
+                        onRefresh ={
+                            beerPagingItems.refresh()
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        BeerListContent(
+                            beerPagingItems = beerPagingItems,
+                            onEvent = { event ->
+                                when (event) {
+                                    is HomeEvents.OnBeerClick -> {
+                                        onBeerClick(event.id)
+                                    }
 
-                    BeerListContent(
-                        beerPagingItems = beerPagingItems,
-                        onEvent = { event ->
-                            when (event) {
-                                is HomeEvents.OnBeerClick -> {
-                                    onBeerClick(event.id)
-                                }
+                                    is HomeEvents.ToggleFav -> {
+                                        viewModel.onEvent(event)
+                                    }
 
-                                is HomeEvents.ToggleFav -> {
-                                    viewModel.onEvent(event)
-                                }
-
-                                HomeEvents.Refresh -> {
-                                    beerPagingItems.refresh()
+                                    HomeEvents.Refresh -> {
+                                        beerPagingItems.refresh()
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
+
 
 
             }
