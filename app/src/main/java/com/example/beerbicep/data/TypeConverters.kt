@@ -5,12 +5,12 @@ import com.example.beerbicep.data.local.IngredientsEntity
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import javax.inject.Inject
 
 class BeerConverters {
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
+
     @TypeConverter
     fun fromStringList(value: String): List<String>? {
         val listType = Types.newParameterizedType(List::class.java, String::class.java)
@@ -24,6 +24,7 @@ class BeerConverters {
         val adapter = moshi.adapter<List<String>>(listType)
         return adapter.toJson(list)
     }
+
     @TypeConverter
     fun fromIngredientsEntity(value: IngredientsEntity): String {
         val adapter = moshi.adapter(IngredientsEntity::class.java)

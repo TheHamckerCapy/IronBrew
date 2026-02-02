@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -35,10 +33,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,12 +44,11 @@ fun CustomTopAppBar(
     searchQuery: String,
     onQueryChange: (String) -> Unit,
     isSearchMode: Boolean,
-    onSearchModeChange: (Boolean)-> Unit
+    onSearchModeChange: (Boolean) -> Unit
 ) {
     TopAppBar(
         modifier = modifier
-            .padding(horizontal = 8.dp)
-           ,
+            .padding(horizontal = 8.dp),
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
@@ -87,8 +82,7 @@ fun CustomTopAppBar(
                     }
                 }
             }
-        }
-        ,
+        },
         navigationIcon = {
             Icon(
                 imageVector = Icons.Rounded.Menu,
@@ -99,7 +93,7 @@ fun CustomTopAppBar(
             )
         },
         actions = {
-            if (!isSearchMode){
+            if (!isSearchMode) {
                 IconButton(onClick = { onSearchModeChange(true) }) {
                     Icon(Icons.Default.Search, contentDescription = "Search")
                 }
@@ -115,7 +109,7 @@ fun CustomTopAppBar(
                     modifier = Modifier
                         .size(30.dp)
                 )
-            }else{
+            } else {
                 IconButton(onClick = {
                     onQueryChange("")
                     onSearchModeChange(false)

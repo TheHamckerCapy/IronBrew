@@ -5,7 +5,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.example.beerbicep.Constant
 import com.example.beerbicep.data.local.BeerDb
 import com.example.beerbicep.data.local.BeerEntity
@@ -31,9 +30,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesBeerApi(): PunkApi{
+    fun providesBeerApi(): PunkApi {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level=HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.BODY
         }
 
         val okHttpCliend = OkHttpClient.Builder()
@@ -53,19 +52,19 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun  providesBeerDatabase(app: Application): BeerDb{
-       return Room.databaseBuilder(
-           context = app,
-           BeerDb::class.java,
-           "beers.db"
-       ).build()
+    fun providesBeerDatabase(app: Application): BeerDb {
+        return Room.databaseBuilder(
+            context = app,
+            BeerDb::class.java,
+            "beers.db"
+        ).build()
 
-   }
+    }
 
     @OptIn(ExperimentalPagingApi::class)
     @Provides
     @Singleton
-    fun providesPager(beerDb: BeerDb,punkApi: PunkApi): Pager<Int,BeerEntity>{
+    fun providesPager(beerDb: BeerDb, punkApi: PunkApi): Pager<Int, BeerEntity> {
         return Pager(
             config = PagingConfig(pageSize = 30),
             remoteMediator = BeerRemoteMediator(

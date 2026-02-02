@@ -11,9 +11,8 @@ import com.example.beerbicep.data.remote.BeerDto
 import com.example.beerbicep.data.remote.HopDto
 import com.example.beerbicep.data.remote.IngredientsDto
 import com.example.beerbicep.data.remote.MaltDto
-import com.example.beerbicep.domain.BeerDomain
 
-fun BeerDto.toBeerEntity(): BeerEntity{
+fun BeerDto.toBeerEntity(): BeerEntity {
     val formattedId = "%03d".format(id)
 
     val constructedImageUrl = "$IMAGE_URL/$formattedId.png"
@@ -26,9 +25,9 @@ fun BeerDto.toBeerEntity(): BeerEntity{
         bitternessUnit = bitternessUnit,
         imageUrl = constructedImageUrl,
         bestFoods = bestFoods,
-        ingredients =ingredients.toIngredientsEntity(),
+        ingredients = ingredients.toIngredientsEntity(),
 
-    )
+        )
 }
 
 fun AmountDto.toAmountEntity(): AmountEntity {

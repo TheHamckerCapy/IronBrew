@@ -17,20 +17,20 @@ interface BeerDao {
     suspend fun clearAll()
 
     @Query("SELECT * FROM beers")
-     fun pagingSource(): PagingSource<Int, BeerEntity>
+    fun pagingSource(): PagingSource<Int, BeerEntity>
 
     @Query("SELECT * FROM beers WHERE isFavourite = 1")
-     fun getFavoriteBeers(): Flow<List<BeerEntity>>
+    fun getFavoriteBeers(): Flow<List<BeerEntity>>
 
     @Query("SELECT * FROM beers WHERE id = :id")
-     fun getBeerById(id: Int): Flow<BeerEntity?>
+    fun getBeerById(id: Int): Flow<BeerEntity?>
 
-     @Query(
-         """
+    @Query(
+        """
              SELECT * FROM beers 
              WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%'
              
          """
-     )
+    )
     suspend fun searchBeerQuery(query: String): List<BeerEntity>
 }

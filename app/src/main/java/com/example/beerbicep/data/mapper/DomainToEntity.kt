@@ -26,6 +26,7 @@ fun BeerDomain.toBeerEntity(): BeerEntity {
         isFavourite = isFavorite
     )
 }
+
 fun Amount.toAmountEntity(): AmountEntity {
     return AmountEntity(
         unit = unit,

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -22,12 +20,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.fontscaling.MathUtils.lerp
 import androidx.compose.ui.util.lerp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.example.beerbicep.R
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
 
@@ -66,6 +62,7 @@ fun BuildImageSlider(
         }
     }
 }
+
 @Composable
 fun <T> InfiniteHorizontalCarousel(
     items: List<T>,
@@ -122,6 +119,6 @@ fun <T> InfiniteHorizontalCarousel(
 
 @Preview
 @Composable
-private fun slidertesting () {
+private fun slidertesting() {
     BuildImageSlider()
 }

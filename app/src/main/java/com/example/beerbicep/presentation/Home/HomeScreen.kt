@@ -4,7 +4,6 @@ package com.example.beerbicep.presentation.Home
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +22,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.LocalDrink
 import androidx.compose.material3.Button
@@ -38,14 +35,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -110,7 +103,7 @@ fun HomeScreen(
                 searchQuery = searchQuery,
                 onQueryChange = viewModel::onSearchQueryChange,
                 isSearchMode = isSearchMode,
-                onSearchModeChange = { isSearchMode=it }
+                onSearchModeChange = { isSearchMode = it }
             )
         }
     ) { paddingValues ->
@@ -131,34 +124,33 @@ fun HomeScreen(
                         }
                     }
                 )
-            } else{
-                    PullToRefreshBox(
-                        isRefreshing = isRefreshing,
-                        onRefresh ={
-                            beerPagingItems.refresh()
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    ){
-                        BeerListContent(
-                            beerPagingItems = beerPagingItems,
-                            onEvent = { event ->
-                                when (event) {
-                                    is HomeEvents.OnBeerClick -> {
-                                        onBeerClick(event.id)
-                                    }
+            } else {
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = {
+                        beerPagingItems.refresh()
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    BeerListContent(
+                        beerPagingItems = beerPagingItems,
+                        onEvent = { event ->
+                            when (event) {
+                                is HomeEvents.OnBeerClick -> {
+                                    onBeerClick(event.id)
+                                }
 
-                                    is HomeEvents.ToggleFav -> {
-                                        viewModel.onEvent(event)
-                                    }
+                                is HomeEvents.ToggleFav -> {
+                                    viewModel.onEvent(event)
+                                }
 
-                                    HomeEvents.Refresh -> {
-                                        beerPagingItems.refresh()
-                                    }
+                                HomeEvents.Refresh -> {
+                                    beerPagingItems.refresh()
                                 }
                             }
-                        )
-                    }
-
+                        }
+                    )
+                }
 
 
             }
@@ -190,10 +182,10 @@ fun SearchResultList(searchResult: Resource<List<BeerDomain>>, onEvent: (HomeEve
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     Text("No beers found", color = Color.Gray)
                 }
-            }else{
+            } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(16.dp),

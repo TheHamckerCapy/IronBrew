@@ -6,9 +6,9 @@ import androidx.room.TypeConverters
 import com.example.beerbicep.data.BeerConverters
 
 
-@Database(entities = [BeerEntity::class,RemoteKey::class], version = 1, exportSchema = false)
+@Database(entities = [BeerEntity::class, RemoteKey::class], version = 1, exportSchema = false)
 @TypeConverters(BeerConverters::class)
-abstract class BeerDb: RoomDatabase() {
+abstract class BeerDb : RoomDatabase() {
     abstract val beerDao: BeerDao
-    abstract val remoteKeyDao : RemoteKeyDao
+    abstract val remoteKeyDao: RemoteKeyDao
 }

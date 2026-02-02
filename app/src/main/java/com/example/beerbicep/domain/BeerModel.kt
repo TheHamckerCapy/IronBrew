@@ -1,7 +1,6 @@
 package com.example.beerbicep.domain
 
 
-
 data class BeerDomain(
 
     val id: Int,
@@ -24,7 +23,6 @@ data class Ingredients(
     val malt: List<Malt>,
     val yeast: String?
 )
-
 
 
 data class Hop(

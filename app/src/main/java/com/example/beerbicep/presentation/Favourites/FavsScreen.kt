@@ -48,7 +48,7 @@ fun FavScreen(
                 }
             )
         }
-    ) {paddingValues ->
+    ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             FavoriteBeerList(
                 beers = state.favBeersList,

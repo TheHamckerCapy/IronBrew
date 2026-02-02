@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -38,7 +37,6 @@ import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -157,7 +155,7 @@ fun AnimatedNavigationBar(
                     label = {
                         Text(
                             text = button.text,
-                            modifier = Modifier.alpha(if(isSelected) 0f else 1f)
+                            modifier = Modifier.alpha(if (isSelected) 0f else 1f)
                         )
                     },
                     colors = NavigationBarItemDefaults.colors().copy(
@@ -283,7 +281,7 @@ private fun Circle(
         AnimatedContent(
             targetState = button.icon, label = "Bottom bar circle icon",
         ) { targetIcon ->
-            Icon(painter = painterResource( targetIcon), button.text, tint = iconColor)
+            Icon(painter = painterResource(targetIcon), button.text, tint = iconColor)
         }
     }
 }

@@ -24,20 +24,22 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: Repository
-): ViewModel() {
+) : ViewModel() {
 
     val beerPagingFlow = repository.getBeerPager().cachedIn(viewModelScope)
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    fun onEvent(events: HomeEvents){
-        when(events){
+    fun onEvent(events: HomeEvents) {
+        when (events) {
             is HomeEvents.OnBeerClick -> {
             }
+
             HomeEvents.Refresh -> {
 
             }
+
             is HomeEvents.ToggleFav -> {
                 viewModelScope.launch {
                     repository.toggleBeer(beerDomain = events.beerDomain)
@@ -56,10 +58,10 @@ class HomeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val searchResult: StateFlow<Resource<List<BeerDomain>>> = _searchQuery
         .debounce(300L)
-        .flatMapLatest {query->
-            if(query.isBlank()){
+        .flatMapLatest { query ->
+            if (query.isBlank()) {
                 flowOf(Resource.Success(emptyList()))
-            }else{
+            } else {
                 repository.searchBeerQuery(query)
             }
 

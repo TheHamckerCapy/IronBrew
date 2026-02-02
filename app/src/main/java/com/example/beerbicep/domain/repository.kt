@@ -10,10 +10,10 @@ interface Repository {
 
     fun getBeerById(id: Int): Flow<Resource<BeerDomain>>
 
-     fun getFavourBeer(): Flow<List<BeerDomain>>
+    fun getFavourBeer(): Flow<List<BeerDomain>>
 
     suspend fun toggleBeer(beerDomain: BeerDomain)
 
-     fun searchBeerQuery(query: String): Flow<Resource<List<BeerDomain>>>
+    fun searchBeerQuery(query: String): Flow<Resource<List<BeerDomain>>>
 
 }

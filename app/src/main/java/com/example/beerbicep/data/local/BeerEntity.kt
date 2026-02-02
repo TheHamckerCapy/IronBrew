@@ -10,7 +10,7 @@ import com.example.beerbicep.data.BeerConverters
 @Entity(tableName = "beers")
 @TypeConverters(BeerConverters::class)
 data class BeerEntity(
-@PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
     val tagLine: String,
@@ -29,7 +29,6 @@ data class IngredientsEntity(
     val malt: List<MaltEntity>,
     val yeast: String?
 )
-
 
 
 data class HopEntity(

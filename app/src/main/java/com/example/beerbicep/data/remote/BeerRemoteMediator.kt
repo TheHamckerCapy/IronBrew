@@ -19,7 +19,7 @@ import javax.inject.Inject
 class BeerRemoteMediator @Inject constructor(
     private val punkApi: PunkApi,
     private val beerDb: BeerDb
-): RemoteMediator<Int,BeerEntity>() {
+) : RemoteMediator<Int, BeerEntity>() {
 
     private val dao = beerDb.beerDao
     private val remoteDao = beerDb.remoteKeyDao
@@ -29,11 +29,12 @@ class BeerRemoteMediator @Inject constructor(
         state: PagingState<Int, BeerEntity>
     ): MediatorResult {
         return try {
-            val loadKey = when(loadType){
+            val loadKey = when (loadType) {
                 LoadType.REFRESH -> {
                     val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                    remoteKeys?.nextKey?.minus(1)?:1
+                    remoteKeys?.nextKey?.minus(1) ?: 1
                 }
+
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeyForFirstItem(state)
                     // If remoteKeys is null, that means the refresh result is not in the database yet.
@@ -41,6 +42,7 @@ class BeerRemoteMediator @Inject constructor(
                         ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     prevKey
                 }
+
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
                     // If remoteKeys is null, that means the refresh result is not in the database yet.
@@ -58,7 +60,7 @@ class BeerRemoteMediator @Inject constructor(
             )
             val endOfPaginationReached = beer.isEmpty()
             beerDb.withTransaction {
-                if(loadType==LoadType.REFRESH){
+                if (loadType == LoadType.REFRESH) {
                     remoteDao.clearRemoteKeys()
                     dao.clearAll()
 
@@ -82,9 +84,9 @@ class BeerRemoteMediator @Inject constructor(
                 endOfPaginationReached = endOfPaginationReached
             )
 
-        }catch (e: IOException){
+        } catch (e: IOException) {
             MediatorResult.Error(e)
-        }catch (e:HttpException){
+        } catch (e: HttpException) {
             MediatorResult.Error(e)
         }
     }

@@ -10,7 +10,7 @@ interface PunkApi {
     suspend fun getListOfBeers(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
-    ):List<BeerDto>
+    ): List<BeerDto>
 
     @GET("beers/{id}")
     suspend fun getBeerById(

@@ -17,16 +17,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.VolumeUp
-import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocalPizza
 import androidx.compose.material.icons.outlined.Science
@@ -120,9 +117,9 @@ fun DetailScreen(
                 if (beer != null) {
                     BeerDetailContent(
 
-                        tts=tts,
+                        tts = tts,
                         beer = beer,
-                        onNavigateUp = {  },
+                        onNavigateUp = { },
                         onToggleFavorite = { viewModel.onEvent(DetailEvents.ToggleFav) }
                     )
                 }
@@ -133,7 +130,7 @@ fun DetailScreen(
 
 @Composable
 fun BeerDetailContent(
-    tts:TtsController,
+    tts: TtsController,
     beer: BeerDomain,
     onNavigateUp: () -> Unit,
     onToggleFavorite: () -> Unit
@@ -184,7 +181,8 @@ fun BeerDetailContent(
                     .width(200.dp)
                     .height(250.dp)
                     .offset(x = 25.dp)
-                    .border(BorderStroke(2.dp, Color(0xFF444444)),))
+                    .border(BorderStroke(2.dp, Color(0xFF444444)))
+            )
 
 
             // 2. The Content Row
@@ -269,11 +267,11 @@ fun BeerDetailContent(
                 .padding(horizontal = 24.dp)
         ) {
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -289,16 +287,17 @@ fun BeerDetailContent(
                         text = "About",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontFamily = my_font_1,
-                            fontWeight = FontWeight.Bold),
+                            fontWeight = FontWeight.Bold
+                        ),
                         color = Color.LightGray,
                         fontSize = 30.sp
                     )
                 }
                 IconButton(
                     onClick = {
-                        if (tts.isSpeaking){
+                        if (tts.isSpeaking) {
                             tts.stop()
-                        }else{
+                        } else {
                             tts.speak(beer.description)
                         }
                     }
@@ -321,7 +320,8 @@ fun BeerDetailContent(
                 text = beer.description,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontFamily = my_font_1,
-                    fontWeight = FontWeight.Light),
+                    fontWeight = FontWeight.Light
+                ),
                 color = Color.LightGray,
                 fontSize = 20.sp
             )
@@ -340,7 +340,8 @@ fun BeerDetailContent(
                     text = "Food Pairing",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontFamily = my_font_1,
-                        fontWeight = FontWeight.Bold),
+                        fontWeight = FontWeight.Bold
+                    ),
                     color = Color.LightGray,
                     fontSize = 30.sp
                 )
@@ -351,7 +352,7 @@ fun BeerDetailContent(
                 Text(
                     text = "• $pairing",
                     style = MaterialTheme.typography.bodyMedium,
-                   fontFamily = FontFamily.Serif,
+                    fontFamily = FontFamily.Serif,
                     color = Color.LightGray,
                     modifier = Modifier.padding(vertical = 2.dp),
                     fontSize = 17.sp
@@ -398,7 +399,10 @@ fun BeerDetailContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             // --- Hops Section ---
-            IngredientSubHeader(text = "Hops", icon = Icons.Outlined.LocalPizza) // Using pizza as a placeholder for hop flower
+            IngredientSubHeader(
+                text = "Hops",
+                icon = Icons.Outlined.LocalPizza
+            ) // Using pizza as a placeholder for hop flower
             beer.ingredients.hops.forEach { hop ->
                 Text(
                     text = "• ${hop.name} (${hop.amount.value} ${hop.amount.unit}) - ${hop.add} / ${hop.attribute}",
@@ -427,6 +431,7 @@ fun BeerDetailContent(
         }
     }
 }
+
 @Composable
 fun IngredientSubHeader(text: String, icon: ImageVector) {
     Row(
@@ -499,6 +504,7 @@ fun StatItem(
         }
     }
 }
+
 @Preview(showBackground = true, backgroundColor = 0xFF121212)
 @Composable
 fun BeerDetailContentNotFavoritePreview() {
@@ -517,10 +523,18 @@ fun BeerDetailContentNotFavoritePreview() {
         ),
         ingredients = Ingredients(
             hops = listOf(
-                Hop(name = "Fuggles", amount = Amount(value = 25.0, unit = "grams"), add = "start", attribute = "bitter")
+                Hop(
+                    name = "Fuggles",
+                    amount = Amount(value = 25.0, unit = "grams"),
+                    add = "start",
+                    attribute = "bitter"
+                )
             ),
             malt = listOf(
-                Malt(name = "Maris Otter Extra Pale", amount = Amount(value = 3.3, unit = "kilograms"))
+                Malt(
+                    name = "Maris Otter Extra Pale",
+                    amount = Amount(value = 3.3, unit = "kilograms")
+                )
             ),
             yeast = "Wyeast 1056 - American Ale™"
         )

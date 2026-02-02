@@ -4,5 +4,5 @@ import com.example.beerbicep.Resource
 import com.example.beerbicep.domain.BeerDomain
 
 data class DetailState(
-    val beerDetail : Resource<BeerDomain> = Resource.Loading(),
-    )
+    val beerDetail: Resource<BeerDomain> = Resource.Loading(),
+)
