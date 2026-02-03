@@ -1,4 +1,4 @@
-package com.example.beerbicep.presentation.Home
+package com.example.beerbicep.AdditionalComponents
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn

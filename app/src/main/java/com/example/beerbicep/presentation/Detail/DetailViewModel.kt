@@ -3,7 +3,7 @@ package com.example.beerbicep.presentation.Detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.beerbicep.Resource
+import com.example.beerbicep.Resource_Class
 import com.example.beerbicep.domain.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +46,7 @@ class DetailViewModel @Inject constructor(
             }
 
             DetailEvents.ToggleFav -> {
-                val currentBeer = (_detailState.value.beerDetail as? Resource.Success)?.data
+                val currentBeer = (_detailState.value.beerDetail as? Resource_Class.Success)?.data
                 if (currentBeer != null) {
                     viewModelScope.launch {
                         repository.toggleBeer(currentBeer)

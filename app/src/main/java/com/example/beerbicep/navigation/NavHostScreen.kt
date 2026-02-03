@@ -16,15 +16,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.beerbicep.AdditionalComponents.AnimatedNavigationBar
+import com.example.beerbicep.AdditionalComponents.ButtonData
 import com.example.beerbicep.R
 import com.example.beerbicep.presentation.Detail.DetailScreen
 import com.example.beerbicep.presentation.Favourites.FavScreen
 import com.example.beerbicep.presentation.Home.HomeScreen
 
-data class NavItem(
-    val route: String,
-    val icon: Int
-)
 
 @Composable
 fun NavScreen(
@@ -135,61 +133,3 @@ fun NavScreen(
 
     }
 }
-
-
-/*
-@Composable
-fun CustomNavigationBar(
-    navController: NavController,
-    items: List<NavItem>,
-    modifier: Modifier = Modifier
-) {
-
-
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 24.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Row(
-            modifier = modifier
-                .width(230.dp)
-                .height(75.dp)
-                .clip(CircleShape)
-                .background(Color.Black)
-                .shadow(elevation = 10.dp, shape = CircleShape),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items.forEach { item ->
-                IconButton(
-                    onClick = {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-
-
-                        }
-                    },
-
-
-                    ) {
-                    Icon(
-                        painter = painterResource(item.icon),
-                        contentDescription = null,
-                        tint = if (currentRoute == item.route) Color.Green else Color.LightGray,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
-        }
-    }
-
-}
-
- */

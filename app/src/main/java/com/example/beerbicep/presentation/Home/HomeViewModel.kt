@@ -3,7 +3,7 @@ package com.example.beerbicep.presentation.Home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.example.beerbicep.Resource
+import com.example.beerbicep.Resource_Class
 import com.example.beerbicep.domain.BeerDomain
 import com.example.beerbicep.domain.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,11 +56,11 @@ class HomeViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val searchResult: StateFlow<Resource<List<BeerDomain>>> = _searchQuery
+    val searchResult: StateFlow<Resource_Class<List<BeerDomain>>> = _searchQuery
         .debounce(300L)
         .flatMapLatest { query ->
             if (query.isBlank()) {
-                flowOf(Resource.Success(emptyList()))
+                flowOf(Resource_Class.Success(emptyList()))
             } else {
                 repository.searchBeerQuery(query)
             }
@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = Resource.Success(emptyList())
+            initialValue = Resource_Class.Success(emptyList())
         )
 
     fun onSearchQueryChange(newQuery: String) {

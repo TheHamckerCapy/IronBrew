@@ -1,4 +1,4 @@
-package com.example.beerbicep
+package com.example.beerbicep.AdditionalComponents
 
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener

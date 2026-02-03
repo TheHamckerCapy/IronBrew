@@ -1,4 +1,4 @@
-package com.example.beerbicep.navigation
+package com.example.beerbicep.AdditionalComponents
 
 
 import androidx.compose.animation.AnimatedContent

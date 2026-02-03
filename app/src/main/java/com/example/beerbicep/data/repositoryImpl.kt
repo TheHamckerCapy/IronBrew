@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.beerbicep.Resource
+import com.example.beerbicep.Resource_Class
 import com.example.beerbicep.data.local.BeerDb
 import com.example.beerbicep.data.local.BeerEntity
 import com.example.beerbicep.data.mapper.toBeerDomain
@@ -47,26 +47,26 @@ class RepositoryImpl @Inject constructor(
             }
     }
 
-    override fun searchBeerQuery(query: String): Flow<Resource<List<BeerDomain>>> {
+    override fun searchBeerQuery(query: String): Flow<Resource_Class<List<BeerDomain>>> {
         return flow {
-            emit(Resource.Loading(true))
+            emit(Resource_Class.Loading(true))
 
             emit(
-                Resource.Success(
+                Resource_Class.Success(
                 data = db.beerDao.searchBeerQuery(query).map { it.toBeerDomain() }
             ))
         }
     }
 
-    override fun getBeerById(id: Int): Flow<Resource<BeerDomain>> {
+    override fun getBeerById(id: Int): Flow<Resource_Class<BeerDomain>> {
         return flow {
             Log.d(TAG, "getBeerById: Starting fetch for beer with id: $id")
-            emit(Resource.Loading(true))
+            emit(Resource_Class.Loading(true))
 
             val checkDbFirst = db.beerDao.getBeerById(id = id).first()
             if (checkDbFirst != null) {
                 Log.i(TAG, "getBeerById: Found beer id $id in local database. Emitting success.")
-                emit(Resource.Success(checkDbFirst.toBeerDomain()))
+                emit(Resource_Class.Success(checkDbFirst.toBeerDomain()))
             }
             try {
                 Log.d(TAG, "getBeerById: Fetching beer id $id from remote API.")
@@ -81,23 +81,23 @@ class RepositoryImpl @Inject constructor(
                     db.beerDao.insertAllBeers(listOf(finalEntity))
                     db.beerDao.getBeerById(id).collect {
                         Log.d(TAG, "getBeerById: Emitting updated beer id $id from database.")
-                        if (it != null) emit(Resource.Success(it.toBeerDomain()))
+                        if (it != null) emit(Resource_Class.Success(it.toBeerDomain()))
                     }
                 } else {
                     if (checkDbFirst == null) {
                         Log.w(TAG, "getBeerById: Beer id $id not found in API or database.")
-                        emit(Resource.Error("Beer Not Found"))
+                        emit(Resource_Class.Error("Beer Not Found"))
                     }
                 }
             } catch (e: HttpException) {
                 Log.e(TAG, "getBeerById: HTTP error fetching beer id $id: ${e.code()}", e)
-                emit(Resource.Error("An error occurred: ${e.message()}"))
+                emit(Resource_Class.Error("An error occurred: ${e.message()}"))
             } catch (e: IOException) {
                 Log.e(TAG, "getBeerById: Network error fetching beer id $id", e)
-                emit(Resource.Error("Couldn't reach the server. Check your internet connection."))
+                emit(Resource_Class.Error("Couldn't reach the server. Check your internet connection."))
             } catch (e: Exception) {
                 Log.e(TAG, "getBeerById: Unknown error fetching beer id $id", e)
-                emit(Resource.Error("An unknown error occurred: ${e.message}"))
+                emit(Resource_Class.Error("An unknown error occurred: ${e.message}"))
             }
         }
     }
