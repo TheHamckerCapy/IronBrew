@@ -39,9 +39,7 @@ The app follows the **Repository Pattern** and **Clean Architecture** principles
 
 ## **🚀 Getting Started**
 
-1. **Clone the repository:**  
-   git clone \[https://github.com/TheHamckerCapy/beerBicep.git\](https://github.com/TheHamckerCapy/beerBicep.git)
-
+1. **Clone the repository:** 
 2. **Open in Android Studio:**  
    Ensure you are using the latest version of Android Studio (Koala or newer recommended).  
 3. **Configure API:**  
