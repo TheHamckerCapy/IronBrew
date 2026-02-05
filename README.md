@@ -53,20 +53,9 @@ private const val IMAGE\_BASE\_URL \= "\[https://your-api-host.com/images\](http
 
 ## **📂 Project Structure**
 
-com.yourpackage  
-├── data  
-│   ├── local         \# Room Entities, DAOs, TypeConverters  
-│   └── remote        \# Retrofit Service, RemoteMediator  
-├── di                \# Hilt Modules  
-├── domain            \# Models, Repository Interface, Mappers  
-├── ui  
-│   ├── components    \# Shared UI (AnimatedNavBar, etc.)  
-│   ├── detail        \# Detail Screen & ViewModel  
-│   ├── favorites     \# Favorites Screen & ViewModel  
-│   ├── home          \# Home Screen & ViewModel  
-│   ├── navigation    \# NavHost & Scaffold Wrapper  
-│   └── theme         \# Compose Theme  
-└── util              \# Helpers (TTS, NetworkObserver, Resource)
+
+<img width="464" height="899" alt="image" src="https://github.com/user-attachments/assets/c731b91d-5875-4372-9732-c01f8643ed02" />
+
 
 ## **📸 Screenshots**
 
