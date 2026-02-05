@@ -22,6 +22,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +68,9 @@ fun AnimatedNavigationBar(
     // We rely on the passed-in selectedIndex for the state
     var barSize by remember { mutableStateOf(IntSize(0, 0)) }
 
+    val  isReady = barSize.width>0
     // first item's center offset for Arrangement.SpaceAround
+    val hasBeenPlaced = remember { mutableStateOf(false) }
     val offsetStep = remember(barSize, buttons.size) {
         if (buttons.isNotEmpty()) barSize.width.toFloat() / (buttons.size * 2) else 0f
     }
@@ -81,7 +85,7 @@ fun AnimatedNavigationBar(
 
     val cutoutOffset by offsetTransition.animateFloat(
         transitionSpec = {
-            if (this.initialState == 0f) {
+            if (!hasBeenPlaced.value || this.initialState == this.targetState) {
                 snap()
             } else {
                 animation
@@ -92,7 +96,7 @@ fun AnimatedNavigationBar(
 
     val circleOffset by offsetTransition.animateIntOffset(
         transitionSpec = {
-            if (this.initialState == 0f) {
+            if (!hasBeenPlaced.value || this.initialState == this.targetState) {
                 snap()
             } else {
                 spring(animation.dampingRatio, animation.stiffness)
@@ -111,7 +115,9 @@ fun AnimatedNavigationBar(
         )
     }
 
-    Box {
+    Box(
+
+    ){
         // Only show circle if we have a valid index
         if (selectedIndex in buttons.indices) {
             Circle(
@@ -127,7 +133,10 @@ fun AnimatedNavigationBar(
 
         Row(
             modifier = Modifier
-                .onPlaced { barSize = it.size }
+                .onPlaced {
+                    barSize = it.size
+                    hasBeenPlaced.value=true
+                }
                 .graphicsLayer {
                     shape = barShape
                     clip = true

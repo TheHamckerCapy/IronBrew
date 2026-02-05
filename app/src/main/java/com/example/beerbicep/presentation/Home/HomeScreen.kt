@@ -62,7 +62,8 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     onBeerClick: (Int) -> Unit,
     onFavoritesClick: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onDrawerClick: ()-> Unit,
 ) {
     val beerPagingItems = viewModel.beerPagingFlow.collectAsLazyPagingItems()
     val context = LocalContext.current
@@ -87,48 +88,7 @@ fun HomeScreen(
         state = rememberTopAppBarState()
     )
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent ={
-            ModalDrawerSheet {
-                Spacer(Modifier.height(12.dp))
 
-                // Drawer Header
-                Text(
-                    text = "TTS Settings",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(start = 24.dp, top = 12.dp, bottom = 24.dp)
-                )
-                HorizontalDivider()
-
-                // Pitch Slider
-                Column(modifier = Modifier.padding(24.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.SettingsVoice, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Pitch: ${String.format("%.1f", state.ttsSettings.pitch)}")
-                    }
-                    Slider(
-                        value = state.ttsSettings.pitch,
-                        onValueChange = { viewModel.onEvent(HomeEvents.OnPitchChange(it)) },
-                        valueRange = 0.5f..2.0f,
-                        steps = 15
-                    )
-                }
-
-                // Rate Slider
-                Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-                    Text("Speed: ${String.format("%.1f", state.ttsSettings.rate)}")
-                    Slider(
-                        value = state.ttsSettings.rate,
-                        onValueChange = { viewModel.onEvent(HomeEvents.OnRateChange(it)) },
-                        valueRange = 0.5f..2.0f,
-                        steps = 15
-                    )
-                }
-            }
-        },
-    ) {
         Scaffold(
             topBar = {
                 CustomTopAppBar(
@@ -138,7 +98,7 @@ fun HomeScreen(
                     isSearchMode = isSearchMode,
                     onSearchModeChange = { isSearchMode = it },
                     onDrawerOpen = {
-                        scope.launch { drawerState.open() }
+                        onDrawerClick()
                     }
                 )
             }
@@ -197,7 +157,7 @@ fun HomeScreen(
 
             }
         }
-    }
+
 
 }
 
