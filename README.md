@@ -61,10 +61,3 @@ private const val IMAGE\_BASE\_URL \= "\[https://your-api-host.com/images\](http
 
 *(Add your screenshots here)*
 
-## **🤝 Contribution**
-
-Contributions are welcome\! Please fork the repository and submit a pull request for any bug fixes or feature enhancements.
-
-## **📄 License**
-
-This project is open-source and available under the [MIT License](https://www.google.com/search?q=LICENSE).
