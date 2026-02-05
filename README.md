@@ -40,12 +40,12 @@ The app follows the **Repository Pattern** and **Clean Architecture** principles
 ## **🚀 Getting Started**
 
 1. **Clone the repository:**  
-   git clone \[https://github.com/yourusername/brewery-app.git\](https://github.com/yourusername/brewery-app.git)
+   git clone \[https://github.com/TheHamckerCapy/beerBicep.git\](https://github.com/TheHamckerCapy/beerBicep.git)
 
 2. **Open in Android Studio:**  
    Ensure you are using the latest version of Android Studio (Koala or newer recommended).  
 3. **Configure API:**  
-   * Navigate to domain/Mappers.kt.  
+   * Navigate to Constant.  
    * Update the IMAGE\_BASE\_URL constant if you are hosting the images locally or on a different server.
 
 private const val IMAGE\_BASE\_URL \= "\[https://your-api-host.com/images\](https://your-api-host.com/images)"
