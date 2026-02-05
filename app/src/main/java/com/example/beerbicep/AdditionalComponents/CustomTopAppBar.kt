@@ -33,7 +33,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +43,8 @@ fun CustomTopAppBar(
     searchQuery: String,
     onQueryChange: (String) -> Unit,
     isSearchMode: Boolean,
-    onSearchModeChange: (Boolean) -> Unit
+    onSearchModeChange: (Boolean) -> Unit,
+    onDrawerOpen: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier
@@ -84,13 +84,19 @@ fun CustomTopAppBar(
             }
         },
         navigationIcon = {
-            Icon(
-                imageVector = Icons.Rounded.Menu,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 8.dp)
-                    .size(27.dp)
-            )
+
+            IconButton(
+                onClick = onDrawerOpen
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Menu,
+                    contentDescription = null,
+                    modifier = Modifier
+
+                        .size(27.dp)
+                )
+            }
+
         },
         actions = {
             if (!isSearchMode) {
@@ -135,17 +141,27 @@ private fun SearchField(
             .fillMaxWidth()
             .height(40.dp),
         singleLine = true,
+        textStyle = MaterialTheme.typography.bodyLarge.copy(
+            color = MaterialTheme.colorScheme.onSurface
+        ),
         decorationBox = { innerTextField ->
             Row(
-
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(Icons.Default.Search, null)
                 Spacer(Modifier.width(8.dp))
 
-                Box(Modifier.weight(1f)) {
+                Box(
+                    contentAlignment = Alignment.CenterStart,
+                    modifier = Modifier.weight(1f)
+                ) {
                     if (query.isEmpty()) {
-                        Text("Search beers...", color = Color.Gray)
+                        Text(
+                            "Search beers...",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                     innerTextField()
                 }

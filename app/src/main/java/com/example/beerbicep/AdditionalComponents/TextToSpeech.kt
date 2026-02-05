@@ -4,6 +4,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,7 +19,7 @@ data class TtsController(
 )
 
 @Composable
-fun rememberTextToSpeech(): TtsController {
+fun rememberTextToSpeech(setting: TtsSetting): TtsController {
     val context = LocalContext.current
     var tts: TextToSpeech? by remember { mutableStateOf(null) }
     var isSpeaking by remember { mutableStateOf(false) }
@@ -53,6 +54,12 @@ fun rememberTextToSpeech(): TtsController {
             textTospeech.shutdown()
         }
     }
+    LaunchedEffect(tts, setting) {
+        tts?.let {
+            it.setPitch(setting.pitch)
+            it.setSpeechRate(setting.rate)
+        }
+    }
     return TtsController(
         speak = { text ->
             tts?.let {
@@ -60,6 +67,8 @@ fun rememberTextToSpeech(): TtsController {
                     tts?.stop()
                     isSpeaking = false
                 } else {
+                    it.setSpeechRate(setting.rate)
+                    it.setPitch(setting.pitch)
                     it.speak(text, TextToSpeech.QUEUE_FLUSH, null, "beer_disc")
                     isSpeaking = true
                 }

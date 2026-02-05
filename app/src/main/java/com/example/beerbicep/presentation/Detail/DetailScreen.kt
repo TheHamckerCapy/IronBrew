@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.beerbicep.Resource_Class
 import com.example.beerbicep.AdditionalComponents.rememberTextToSpeech
 import com.example.beerbicep.ui.theme.my_font_1
@@ -34,11 +35,15 @@ import com.example.beerbicep.ui.theme.my_font_1
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel(),
+    navController: NavController
 ) {
 
     val state by viewModel.detailState.collectAsState()
-    val tts = rememberTextToSpeech()
+    val ttsSetting by viewModel.ttsSettings.collectAsState()
+    val tts = rememberTextToSpeech(
+        setting = ttsSetting
+    )
     DisposableEffect(Unit) {
         onDispose {
             tts.stop()
@@ -83,7 +88,7 @@ fun DetailScreen(
 
                         tts = tts,
                         beer = beer,
-                        onNavigateUp = { },
+                        onNavigateUp = { navController.popBackStack()},
                         onToggleFavorite = { viewModel.onEvent(DetailEvents.ToggleFav) }
                     )
                 }

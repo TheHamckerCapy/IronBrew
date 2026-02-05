@@ -5,17 +5,31 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SettingsVoice
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +54,7 @@ import com.example.beerbicep.AdditionalComponents.BuildImageSlider
 import com.example.beerbicep.AdditionalComponents.CustomTopAppBar
 import com.example.beerbicep.Resource_Class
 import com.example.beerbicep.domain.BeerDomain
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +70,9 @@ fun HomeScreen(
     val searchResult by viewModel.searchResult.collectAsState()
     var isSearchMode by remember { mutableStateOf(false) }
     val isRefreshing = beerPagingItems.loadState.refresh is LoadState.Loading
+    val state by viewModel.state.collectAsState()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     // Handle Paging Error Toasts (Optional UX enhancement)
     LaunchedEffect(key1 = beerPagingItems.loadState) {
         if (beerPagingItems.loadState.refresh is LoadState.Error) {
@@ -67,68 +86,119 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(
         state = rememberTopAppBarState()
     )
-    Scaffold(
-        topBar = {
-            CustomTopAppBar(
-                scrollBehavior = scrollBehavior,
-                searchQuery = searchQuery,
-                onQueryChange = viewModel::onSearchQueryChange,
-                isSearchMode = isSearchMode,
-                onSearchModeChange = { isSearchMode = it }
-            )
-        }
-    ) { paddingValues ->
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            if (isSearchMode && searchQuery.isNotBlank()) {
-                SearchResultList(
-                    searchResult = searchResult,
-                    onEvent = { event ->
-                        when (event) {
-                            is HomeEvents.OnBeerClick -> onBeerClick(event.id)
-                            else -> viewModel.onEvent(event)
-                        }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent ={
+            ModalDrawerSheet {
+                Spacer(Modifier.height(12.dp))
+
+                // Drawer Header
+                Text(
+                    text = "TTS Settings",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(start = 24.dp, top = 12.dp, bottom = 24.dp)
+                )
+                HorizontalDivider()
+
+                // Pitch Slider
+                Column(modifier = Modifier.padding(24.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.SettingsVoice, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Pitch: ${String.format("%.1f", state.ttsSettings.pitch)}")
+                    }
+                    Slider(
+                        value = state.ttsSettings.pitch,
+                        onValueChange = { viewModel.onEvent(HomeEvents.OnPitchChange(it)) },
+                        valueRange = 0.5f..2.0f,
+                        steps = 15
+                    )
+                }
+
+                // Rate Slider
+                Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+                    Text("Speed: ${String.format("%.1f", state.ttsSettings.rate)}")
+                    Slider(
+                        value = state.ttsSettings.rate,
+                        onValueChange = { viewModel.onEvent(HomeEvents.OnRateChange(it)) },
+                        valueRange = 0.5f..2.0f,
+                        steps = 15
+                    )
+                }
+            }
+        },
+    ) {
+        Scaffold(
+            topBar = {
+                CustomTopAppBar(
+                    scrollBehavior = scrollBehavior,
+                    searchQuery = searchQuery,
+                    onQueryChange = viewModel::onSearchQueryChange,
+                    isSearchMode = isSearchMode,
+                    onSearchModeChange = { isSearchMode = it },
+                    onDrawerOpen = {
+                        scope.launch { drawerState.open() }
                     }
                 )
-            } else {
-                PullToRefreshBox(
-                    isRefreshing = isRefreshing,
-                    onRefresh = {
-                        beerPagingItems.refresh()
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    BeerListContent(
-                        beerPagingItems = beerPagingItems,
+            }
+        ) { paddingValues ->
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                if (isSearchMode && searchQuery.isNotBlank()) {
+                    SearchResultList(
+                        searchResult = searchResult,
                         onEvent = { event ->
                             when (event) {
-                                is HomeEvents.OnBeerClick -> {
-                                    onBeerClick(event.id)
-                                }
-
-                                is HomeEvents.ToggleFav -> {
-                                    viewModel.onEvent(event)
-                                }
-
-                                HomeEvents.Refresh -> {
-                                    beerPagingItems.refresh()
-                                }
+                                is HomeEvents.OnBeerClick -> onBeerClick(event.id)
+                                else -> viewModel.onEvent(event)
                             }
                         }
                     )
+                } else {
+                    PullToRefreshBox(
+                        isRefreshing = isRefreshing,
+                        onRefresh = {
+                            beerPagingItems.refresh()
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        BeerListContent(
+                            beerPagingItems = beerPagingItems,
+                            onEvent = { event ->
+                                when (event) {
+                                    is HomeEvents.OnBeerClick -> {
+                                        onBeerClick(event.id)
+                                    }
+
+                                    is HomeEvents.ToggleFav -> {
+                                        viewModel.onEvent(event)
+                                    }
+
+                                    HomeEvents.Refresh -> {
+                                        beerPagingItems.refresh()
+                                    }
+
+                                    is HomeEvents.OnPitchChange ->{}
+                                    is HomeEvents.OnRateChange -> {}
+                                }
+                            }
+                        )
+                    }
+
+
                 }
 
 
             }
-
-
         }
     }
+
 }
 
 @Composable

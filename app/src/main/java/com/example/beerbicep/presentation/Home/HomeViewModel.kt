@@ -3,6 +3,7 @@ package com.example.beerbicep.presentation.Home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.example.beerbicep.AdditionalComponents.TtsManager
 import com.example.beerbicep.Resource_Class
 import com.example.beerbicep.domain.BeerDomain
 import com.example.beerbicep.domain.Repository
@@ -16,20 +17,39 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    private val ttsManager: TtsManager
 ) : ViewModel() {
 
     val beerPagingFlow = repository.getBeerPager().cachedIn(viewModelScope)
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
+
+    private val _state = MutableStateFlow(HomeState())
+    val state: StateFlow<HomeState> = _state.asStateFlow()
+    init {
+
+        observeTtsSettings()
+    }
+
+    private fun observeTtsSettings() {
+        ttsManager.setting
+            .onEach { settings ->
+                _state.update { it.copy(ttsSettings = settings) }
+            }
+            .launchIn(viewModelScope)
+    }
 
     fun onEvent(events: HomeEvents) {
         when (events) {
@@ -45,6 +65,9 @@ class HomeViewModel @Inject constructor(
                     repository.toggleBeer(beerDomain = events.beerDomain)
                 }
             }
+
+            is HomeEvents.OnPitchChange ->ttsManager.updatePitch(events.value)
+            is HomeEvents.OnRateChange -> ttsManager.updateRate(events.value)
         }
     }
 

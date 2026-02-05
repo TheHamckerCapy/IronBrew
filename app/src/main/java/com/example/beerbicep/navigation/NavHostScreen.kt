@@ -112,7 +112,7 @@ fun NavScreen(
                     arguments = listOf(navArgument("beerId") { type = NavType.IntType })
                 ) {
                     DetailScreen(
-
+                        navController=navController
                     )
                 }
                 composable(
