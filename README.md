@@ -1,4 +1,4 @@
-<img width="1000" alt="mockuper" src="https://github.com/user-attachments/assets/e3fe02f8-8ddf-47c8-a88b-b6187cc4af87" />
+<img width="1000" alt="mockuper" src="https://github.com/user-attachments/assets/09931fae-21bb-4596-a69f-3f703b799410" />
 
 # **🍺 Brewery \- Modern Android Beer App**
 
