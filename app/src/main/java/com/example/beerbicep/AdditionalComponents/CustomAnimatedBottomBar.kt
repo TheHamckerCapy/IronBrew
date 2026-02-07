@@ -52,7 +52,11 @@ import androidx.compose.ui.zIndex
 
 
 data class ButtonData(val text: String, val icon: Int)
-
+/*
+Composable for the bottom navigation bar.
+Reference from - https://stackoverflow.com/questions/78281249/how-to-create-a-custom-bottomnavigationappbar-in-jetpack-compose
+has one issue where when app opens from fresh the circle glitches from left .
+ */
 @Composable
 fun AnimatedNavigationBar(
     buttons: List<ButtonData>,
@@ -60,16 +64,16 @@ fun AnimatedNavigationBar(
     circleColor: Color,
     selectedColor: Color,
     unselectedColor: Color,
-    selectedIndex: Int, // Modified: State is passed in
-    onItemClick: (Int) -> Unit // Modified: Events are passed out
+    selectedIndex: Int,
+    onItemClick: (Int) -> Unit
 ) {
     val circleRadius = 26.dp
 
-    // We rely on the passed-in selectedIndex for the state
+
     var barSize by remember { mutableStateOf(IntSize(0, 0)) }
 
     val  isReady = barSize.width>0
-    // first item's center offset for Arrangement.SpaceAround
+
     val hasBeenPlaced = remember { mutableStateOf(false) }
     val offsetStep = remember(barSize, buttons.size) {
         if (buttons.isNotEmpty()) barSize.width.toFloat() / (buttons.size * 2) else 0f
@@ -118,7 +122,7 @@ fun AnimatedNavigationBar(
     Box(
 
     ){
-        // Only show circle if we have a valid index
+
         if (selectedIndex in buttons.indices) {
             Circle(
                 modifier = Modifier
@@ -180,6 +184,7 @@ fun AnimatedNavigationBar(
     }
 }
 
+// class which overrides shape , overrides built in outline and creates path for the bottom drawer also making use of cubic belzier curve
 private class BarShape(
     private val offset: Float,
     private val circleRadius: Dp,
@@ -205,9 +210,9 @@ private class BarShape(
             val cutoutLeftX = cutoutCenterX - cutoutEdgeOffset
             val cutoutRightX = cutoutCenterX + cutoutEdgeOffset
 
-            // bottom left
+
             moveTo(x = 0F, y = size.height)
-            // top left
+
             if (cutoutLeftX > 0) {
                 val realLeftCornerDiameter = if (cutoutLeftX >= cornerRadiusPx) {
                     cornerDiameter
@@ -227,7 +232,7 @@ private class BarShape(
                 )
             }
             lineTo(cutoutLeftX, 0f)
-            // cutout
+
             cubicTo(
                 x1 = cutoutCenterX - cutoutRadius,
                 y1 = 0f,
@@ -244,7 +249,7 @@ private class BarShape(
                 x3 = cutoutRightX,
                 y3 = 0f,
             )
-            // top right
+
             if (cutoutRightX < size.width) {
                 val realRightCornerDiameter = if (cutoutRightX <= size.width - cornerRadiusPx) {
                     cornerDiameter
@@ -263,7 +268,7 @@ private class BarShape(
                     forceMoveTo = false
                 )
             }
-            // bottom right
+
             lineTo(x = size.width, y = size.height)
             close()
         }
@@ -271,7 +276,7 @@ private class BarShape(
 
 
 }
-
+// circle composable for the bottom bar
 @Composable
 private fun Circle(
     modifier: Modifier = Modifier,

@@ -27,6 +27,12 @@ import coil3.request.crossfade
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
 
+/*
+infinite horizontal carousel for the image slider in actual it creates 1000 pager .
+reference - https://medium.com/@somgov0/how-to-build-an-auto-image-slider-in-jetpack-compose-970e07c56db3
+ */
+
+
 @Composable
 fun BuildImageSlider(
     modifier: Modifier = Modifier
@@ -73,14 +79,14 @@ fun <T> InfiniteHorizontalCarousel(
 ) {
     if (items.isEmpty()) return
 
-    val repeatedCount = 1000 // Big enough to feel infinite
+    val repeatedCount = 1000
     val startIndex = (repeatedCount / 2) - ((repeatedCount / 2) % items.size)
 
     val state = rememberPagerState(initialPage = startIndex) { repeatedCount }
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(3000) // Auto-scroll every 3 seconds
+            delay(3000)
             state.animateScrollToPage(state.currentPage + 1)
         }
     }
@@ -102,8 +108,6 @@ fun <T> InfiniteHorizontalCarousel(
                     .graphicsLayer {
                         val pageOffset =
                             ((state.currentPage - index) + state.currentPageOffsetFraction).absoluteValue
-
-                        // Add a subtle scale effect
                         scaleY = lerp(
                             start = 0.85f,
                             stop = 1f,
@@ -115,10 +119,4 @@ fun <T> InfiniteHorizontalCarousel(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun slidertesting() {
-    BuildImageSlider()
 }

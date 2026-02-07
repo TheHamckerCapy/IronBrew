@@ -42,7 +42,10 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.example.beerbicep.domain.BeerDomain
-
+/*
+Composable for displaying a single beer item in a list. takes in beerdomain from /domain . onclick and on toggle favorite
+are provided to open up detail screen and toggle favorite
+ */
 @Composable
 fun BeerItem(
     beer: BeerDomain,
@@ -52,7 +55,7 @@ fun BeerItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min) // Important for layout consistency
+            .height(IntrinsicSize.Min)
             .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
@@ -61,9 +64,9 @@ fun BeerItem(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(12.dp),
-            verticalAlignment = Alignment.Top // Align to top to handle long descriptions
+            verticalAlignment = Alignment.Top
         ) {
-            // Beer Image
+
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(beer.imageUrl)
@@ -74,14 +77,13 @@ fun BeerItem(
                     .weight(1f)
                     .height(120.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White), // White background for transparent PNGs
+                    .background(Color.White),
                 contentScale = ContentScale.Fit,
-                error = rememberVectorPainter(Icons.Outlined.LocalDrink) // Simple error placeholder
+                error = rememberVectorPainter(Icons.Outlined.LocalDrink)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Beer Details
             Column(
                 modifier = Modifier
                     .weight(3f)
@@ -92,7 +94,7 @@ fun BeerItem(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    // Name
+
                     Text(
                         text = beer.name,
                         style = MaterialTheme.typography.titleMedium,
@@ -102,7 +104,7 @@ fun BeerItem(
                         modifier = Modifier.weight(1f)
                     )
 
-                    // Favorite Button
+
                     IconButton(
                         onClick = onToggleFavorite,
                         modifier = Modifier.size(24.dp)
@@ -117,7 +119,7 @@ fun BeerItem(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Tagline
+
                 Text(
                     text = beer.tagLine,
                     style = MaterialTheme.typography.bodySmall,
@@ -130,7 +132,7 @@ fun BeerItem(
                 Spacer(modifier = Modifier.height(8.dp))
 
 
-                // ABV Badge
+
                 Surface(
                     shape = RoundedCornerShape(4.dp),
                     color = MaterialTheme.colorScheme.primaryContainer,

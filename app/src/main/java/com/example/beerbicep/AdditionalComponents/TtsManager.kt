@@ -10,11 +10,11 @@ data class TtsSetting(
     val pitch: Float = 1.0f,
     val rate: Float = 1.0f
 )
-
+//singleton so that only one instance is created and the data gets shared globally across the app
 @Singleton
 class TtsManager @Inject constructor(){
     private val _setting = MutableStateFlow(TtsSetting())
-    val setting = _setting.asStateFlow()
+    val setting = _setting.asStateFlow()//exposed to ui
 
 
     fun updatePitch(newPitch: Float) {

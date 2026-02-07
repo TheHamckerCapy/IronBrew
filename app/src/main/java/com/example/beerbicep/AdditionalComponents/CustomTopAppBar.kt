@@ -34,7 +34,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
+/*
+composable for top app bar with search field . if  isSearchMode is true , search field is displayed else title is displayed
+ondrawer callback is for opening side navigation drawer
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
