@@ -25,13 +25,14 @@ import javax.inject.Singleton
 private const val TAG = "RepositoryImpl" // Tag for logging
 
 
-@Singleton
+@Singleton// one instance for the whole application
 class RepositoryImpl @Inject constructor(
     private val api: PunkApi,
     private val db: BeerDb,
-    private val pager: Pager<Int, BeerEntity>
+    private val pager: Pager<Int, BeerEntity>//get from di
 ) : Repository {
 
+    // returns flow of paging data and maps it to domain beer model using mapper
     override fun getBeerPager(): Flow<PagingData<BeerDomain>> {
         Log.d(TAG, "getBeerPager: Creating beer pager flow.")
         return pager.flow
@@ -46,7 +47,8 @@ class RepositoryImpl @Inject constructor(
 
             }
     }
-
+    //uses flow of resource class created to handle loading , success , error states , searches the query
+    // from database and emits the result
     override fun searchBeerQuery(query: String): Flow<Resource_Class<List<BeerDomain>>> {
         return flow {
             emit(Resource_Class.Loading(true))
@@ -57,7 +59,16 @@ class RepositoryImpl @Inject constructor(
             ))
         }
     }
+    /*
+     Implements a "cache-first, then network" strategy to fetch a single beer:
 
+        It immediately emits a Loading state.
+        It first attempts to retrieve the beer from the local database (db). If found, it emits a Success state with the cached data.
+        It then proceeds to fetch the beer from the remote api.
+        If the network request is successful, it updates the local database with the fresh data, carefully preserving the isFavourite status if the beer was already in the database.
+        It then emits a final Success state with the updated data from the database.
+        It includes robust error handling for HttpException (server errors), IOException (network issues), and other exceptions, emitting an Error state with an appropriate message.
+     */
     override fun getBeerById(id: Int): Flow<Resource_Class<BeerDomain>> {
         return flow {
             Log.d(TAG, "getBeerById: Starting fetch for beer with id: $id")

@@ -33,11 +33,11 @@ fun AmountEntity.toAmount(): Amount {
     )
 }
 
-// Hop & Malt
+
 fun HopEntity.toHop(): Hop {
     return Hop(
         add = add,
-        amount = amount.toAmount(), // <-- Use the mapper
+        amount = amount.toAmount(),
         attribute = attribute,
         name = name
     )
@@ -45,16 +45,16 @@ fun HopEntity.toHop(): Hop {
 
 fun MaltEntity.toMalt(): Malt {
     return Malt(
-        amount = amount.toAmount(), // <-- Use the mapper
+        amount = amount.toAmount(),
         name = name
     )
 }
 
-// Ingredients
+
 fun IngredientsEntity.toIngredients(): Ingredients {
     return Ingredients(
-        hops = hops.map { it.toHop() }, // <-- Map the list
-        malt = malt.map { it.toMalt() }, // <-- Map the list
+        hops = hops.map { it.toHop() },
+        malt = malt.map { it.toMalt() },
         yeast = yeast
     )
 }
