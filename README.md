@@ -48,7 +48,8 @@ The app follows the **Repository Pattern** and **Clean Architecture** principles
 1. **Clone the repository:** 
 2. **Open in Android Studio:**  
    Ensure you are using the latest version of Android Studio (Koala or newer recommended).  
-3. **Configure API:**  
+3. **Configure API:**
+   * API source - https://github.com/alxiw/punkapi
    * Navigate to Constant.  
    * Update the IMAGE\_BASE\_URL constant if you are hosting the images locally or on a different server.
 
