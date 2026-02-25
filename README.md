@@ -1,16 +1,12 @@
 <img width="1000" alt="mockuper" src="https://github.com/user-attachments/assets/09931fae-21bb-4596-a69f-3f703b799410" />
 
-# **🍺 Brewery \- Modern Android Beer App**
+# **🍺 IronBrew \- Modern Android Beer App**
 
 A robust, offline-first Android application built with **Kotlin** and **Jetpack Compose**. This project demonstrates modern Android development practices, featuring paginated data caching, custom UI animations, text-to-speech integration.
 
 ## **📱 Features**
 
-* **Offline-First Pagination:** Seamless infin
-
-
-
-ite scrolling using **Paging 3** with a **RemoteMediator** that caches data into a **Room** database.  
+* **Offline-First Pagination:** Seamless infinite scrolling using **Paging 3** with a **RemoteMediator** that caches data into a **Room** database.  
 * **Favorites System:** Save your favorite brews locally to access them anytime.  
 * **Text-to-Speech (TTS):** Listen to beer descriptions with a built-in accessibility player.  
 * **Custom Navigation:** A custom-built **Animated Bottom Navigation Bar** using Canvas and Spring animations.
